@@ -13,9 +13,35 @@
 </template>
 
 <template name="home">
-    AYOAYOAYOAOY
-    <br>
-    <a href="/testTemplate">test</a>
+    <div id="homeDiv" class="holder">
+        <div class="ui middle aligned centered grid">
+            <div class="column">
+                <h3 class="ui horizontal divider header topSpacing">
+                  <i class="music icon"></i>
+                  Welcome, {{firstName}}!
+                </h3>
+                <div class="ui form">
+                    <div class="field">
+                        <label>
+                            Instrument
+                        </label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="instrument">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Choose an instrument...</div>
+                            <div class="menu">
+                                <div class="item" data-value="Synth">Synth</div>
+                                <div class="item" data-value="Bass">Bass</div>
+                                <div class="item" data-value="Drums">Drums</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button id="startPlaying" class="ui blue button">Begin</button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <template name="testTemplate">

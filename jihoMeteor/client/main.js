@@ -2,19 +2,24 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { Session } from 'meteor/session';
 
-
 import './main.html';
 
-if(Meteor.isClient) {
+userDB = new Mongo.Collection("userDB");
 
+if(Meteor.isClient) {
 	Meteor.subscribe("userData");
+
+	Template.registerHelper( 'firstName', () => {
+		return Meteor.user().firstName
+		}
+	);
 
 	Template.login.onRendered(function(){
         $('#createAccountDiv').hide();
         $('#forgotPasswordDiv').hide();
         $('#createAccountForm').validate();
         $('#loginForm').validate();
-    })
+    });
 
     Template.login.events({
         "submit #loginForm": function(event) {
@@ -66,6 +71,25 @@ if(Meteor.isClient) {
             $('#forgotPasswordDiv').hide(500)
             $('#loginDiv').show(500)
         }
+    });
+
+    Template.home.onRendered(function() {
+    	this.$('.ui.dropdown').dropdown();
     })
 
+    Template.home.events({
+    	"click #startPlaying": function() {
+    		if ($('[name=instrument]').val()) {
+	    		let user = {
+	    			userID: Meteor.user()._id,
+	    			name: Meteor.user().firstName,
+	    			instrument: $('[name=instrument]').val(),
+				}
+				console.log(user)
+			} else {
+				$("#homeDiv").transition('shake');
+				alertify.alert("Error!","Please choose an instrument.");
+			}
+    	}
+    })
 }

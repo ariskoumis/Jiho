@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
+userDB = new Mongo.Collection("userDB");
+
 Meteor.startup(() => {
 
   	Accounts.onCreateUser(function(options, user) {

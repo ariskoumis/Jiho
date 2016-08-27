@@ -1,1 +1,8 @@
-/* CSS declarations go here */
+.holder {
+  height: 500px;
+  width: 400px;
+  margin: auto;
+}
+.holder .middle {
+  height: 100%;
+}
