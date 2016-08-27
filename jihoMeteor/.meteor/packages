@@ -24,3 +24,5 @@ semantic:ui
 flemay:less-autoprefixer
 kadira:flow-router
 accounts-ui
+kadira:blaze-layout
+session
