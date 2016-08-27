@@ -1,17 +1,113 @@
 <head>
-  <title>jihoMeteor</title>
+    <title>jihoMeteor</title>
 </head>
 
 <template name="main">
-  {{> Template.dynamic template=currentPage}}
+    <div class="ui container">
+        {{#if currentUser}}        
+            {{> Template.dynamic template=currentPage}}
+        {{else}}
+            {{> login}}
+        {{/if}}
+    </div>
 </template>
 
 <template name="home">
-  AYOAYOAYOAOY
-  <br>
-  <a href="/testTemplate">test</a>
+    AYOAYOAYOAOY
+    <br>
+    <a href="/testTemplate">test</a>
 </template>
 
 <template name="testTemplate">
-  THATS ME
+    THATS ME
+</template>
+
+<template name="login">
+    <h3 class="ui horizontal divider header topSpacing">
+      <i class="music icon"></i>
+      Login
+    </h3>
+    <br>
+    <div id="loginDiv" class="holder">
+        <div id="holder middle">
+            <form id="loginForm" class="login ui form attached fluid">
+                <div class="field">
+                    <label>Email</label>
+                    <div class="ui left icon input">
+                        <input type="text" name="loginEmail" placeholder="Email" required>
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="left">Password</label>
+                    <div class="ui left icon input">
+                        <input type="password" name="loginPassword" placeholder="Password" required>
+                        <i class="lock icon"></i>
+                    </div>
+                </div>
+                <div onclick="javascript:$('#loginForm').submit()" class="ui blue fluid animated button" type="submit" tabindex="0">
+                    <div class="visible content">Login</div>
+                    <div class="hidden content">
+                        <i class="right arrow icon"></i>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <div class="centeredContent">
+                <div class="ui fluid buttons">
+                  <button id="createAccount" class="ui button">Create Account</button>
+                  <div class="or"></div>
+                  <button id="forgotPassword" class="ui button">Forgot Password?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="createAccountDiv">
+        <div id="backToLogin">
+            <i class="large blue arrow left icon"></i>
+        </div>
+        <br>
+        <form id="createAccountForm" class="ui form attached fluid">
+            <div class="six fields">
+                <div class="six wide field required">
+                    <span> 
+                        <label>First Name</label>
+                    </span>
+                    <input class="ui" type="text" name="firstName" placeholder="John" required>
+                </div>
+                <div class="six wide field required">
+                    <label>Last Name</label>
+                    <input type="text" name="lastName" placeholder="Doe" required>
+                </div>
+                <div class="four wide field required">
+                    <label>Birthday</label>
+                    <div class="ui left icon input">
+                        <input type="date" name="birthday" required>
+                        <i class="birthday icon"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="field required">
+                <label>Email</label>
+                <div class="ui left icon input">
+                    <input type="text" name="email" placeholder="Email" required>
+                    <i class="mail icon"></i>
+                </div>
+            </div>
+            <div class="field required">
+                <label class="left">Password</label>
+                <div class="ui left icon input">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <i class="lock icon"></i>
+                </div>
+            </div> 
+            <div onclick="javascript:$('#createAccountForm').submit()" class="ui fluid animated button" type="submit" tabindex="0">
+                <div class="visible content">Submit</div>
+                <div class="hidden content">
+                    <i class="right arrow icon"></i>
+                </div>
+            </div>
+        </form>
+    </div>
 </template>
