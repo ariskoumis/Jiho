@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 songs = new Mongo.Collection("songs");
+songData = new Mongo.Collection("songData");
 
 Meteor.startup(() => {
 

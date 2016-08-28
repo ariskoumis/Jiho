@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import './main.html';
 
 songs = new Mongo.Collection("songs");
+songData = new Mongo.Collection("songData");
 
 if(Meteor.isClient) {
 	Meteor.subscribe("userData");
