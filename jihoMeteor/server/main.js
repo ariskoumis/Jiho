@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
-songs = new Mongo.Collection("songs");
-songData = new Mongo.Collection("songData");
+let songs = new Mongo.Collection("songs");
+let songData = new Mongo.Collection("songData");
 
 Meteor.startup(() => {
 
@@ -52,7 +52,9 @@ Meteor.startup(() => {
     		}
     	},
     	doneEditing: function(songID) {
+            let currentInstrument;
     		if(songs.findOne({_id: songID}).state == "1") {
+                currentInstrument = "Drums";
 				let newUser = Meteor.users.findOne({"profile.waiting":true, "profile.instrument": "Synth"})
 				if (newUser) {
 					songs.update(songID, {
@@ -67,6 +69,7 @@ Meteor.startup(() => {
 				}
     		}
     		else if(songs.findOne({_id: songID}).state == "2") {
+                currentInstrument = "Synth";
     			let newUser = Meteor.users.findOne({"profile.waiting":true, "profile.instrument": "Bass"})
     			if (newUser) {
 	    			songs.update(songID, {
@@ -76,15 +79,45 @@ Meteor.startup(() => {
 					Meteor.users.update(newUser._id, {$set: {"profile.waiting": false, "profile.currentSong": songID}});
 				} else {
 					songs.update(songID, {
+                        
 	    				$set: {state: 3, locked: false},
 	    			})
 				}
     		} else {
+                currentInstrument = "Bass";
 	    		// songs.update(songID, {
     			// 	$set: {state: 1, locked: false}
     			// })
     			console.log("Something went wrong..");
     		}
+            let data = {
+                songID: songID,
+                content: [
+                    {
+                        instrument: currentInstrument,
+                        notes: [
+                            {
+                                timeStart: 1,
+                                timeEnd: 10,
+                                note:1
+                            }, 
+                            {
+                                timeStart: 4,
+                                timeEnd: 12,
+                                note:5
+                            }, 
+                            {
+                                timeStart: 5,
+                                timeEnd: 14,
+                                note:3
+                            }, 
+                        ]
+
+                    }
+                ]
+
+            }
+            songData.insert(data)
     	},
     	nameSong: function(nameInput) {
     		songs.update(Meteor.user().profile.currentSong, {
