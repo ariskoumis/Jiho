@@ -12,8 +12,8 @@
     </div>
 </template>
 
-<template name="home">
-    <div id="homeDiv" class="holder">
+<template name="turnBased">
+    <div id="turnBasedDiv" class="holder">
         <div class="ui middle aligned centered grid">
             <div class="column">
                 <h3 class="ui horizontal divider header topSpacing">
@@ -172,7 +172,7 @@
                     <li><a href="/">{{this.name}}</a></li>
                 {{/each}}
                 <div class="ui divider"></div>
-                <button id="backHome" class="ui fluid blue button">Go Back</button>
+                <button id="goBack" class="ui fluid blue button">Go Back</button>
             </div>
         </div>
     </div>
@@ -194,7 +194,6 @@
 </template>
 
 <template name="modalContent">
-        <i class="close icon"></i>
         <div class="header">
             Welcome to Jiho!
         </div>
@@ -216,4 +215,10 @@
                 </div>
             </div>
         </div>
+</template>
+
+<template name="home">
+    <div class="ui basic modal">
+        {{> modalContent}}
+    </div>
 </template>
