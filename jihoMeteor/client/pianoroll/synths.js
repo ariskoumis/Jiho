@@ -267,6 +267,11 @@ synths.push(new DrumSynth());
 
 function step() {
 
+  if (!pianoOn) {
+    requestAnimationFrame(step);
+    return;
+  }
+
   for (var halfStep in onlineKeys) {
     var halfStepNum = parseInt(halfStep);
     if (halfStepNum == -1000) {

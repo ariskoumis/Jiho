@@ -1,4 +1,6 @@
 
+pianoOn = false;
+
 keys = {};
 offlineKeys = {};
 onlineKeys = {};
@@ -7,6 +9,9 @@ voicePool = [];
 voices = {};
 
 sequencer = null;
+scrubber = null;
+
+otherInstruments = null;
 
 var noteWidth = 0.00390625;
 
@@ -47,17 +52,21 @@ class StepSequencer {
     dom.scrollTop(706);
 
   }
+  destroy() {
+
+  }
 }
 
 class Scrubber {
   constructor(sequencer) {
 
+    scrubber = this;
     this.sequencer = sequencer;
 
     var dom = this.dom = $("#scrubber");
     var line = this.line = $(".scrubber-line", dom);
 
-    $(document.body).keydown((e) => {
+    this._keydown = (e) => {
       if (e.which == 32) {
         if (this.playing) {
           this.pause();
@@ -66,7 +75,8 @@ class Scrubber {
         }
         e.preventDefault();
       }
-    })
+    };
+    $(document.body).keydown(this._keydown);
 
     dom.mousedown((e) => {
       this.dragging = true;
@@ -94,7 +104,6 @@ class Scrubber {
         this.draggingNote = null;
       }
     };
-
     $(document.body).mouseup(this._mouseup);
 
     this._mousemove = (e) => {
@@ -134,9 +143,9 @@ class Scrubber {
         console.log(this.draggingNote);
       }
     }
-
     $(document.body).mousemove(this._mousemove);
 
+    this.destroyed = false;
     this.recording = false;
     this.playing = false;
     this.setTime(0);
@@ -146,6 +155,7 @@ class Scrubber {
 
     this.notes = [];
     this.notesDom = [];
+    this.otherInstruments = otherInstruments;
 
     console.log(this.notes);
 
@@ -154,11 +164,25 @@ class Scrubber {
     this.tick();
   }
 
+  loadOtherInstruments(otherInstruments) {
+    this.otherInstruments = otherInstruments;
+  }
+
+  destroy() {
+    this.destroyed = true;
+    $(document.body).unbind("mouseup", this._mouseup);
+    $(document.body).unbind("mousemove", this._mousemove);
+  }
+
   currentTime() {
     return (new Date()).getTime();
   }
 
   tick() {
+    if (this.destroyed) {
+      return;
+    }
+
     if (this.playing) {
       var currentTime = this.currentTime() - this.startTime;
       var normTime = currentTime/this.duration;
@@ -189,6 +213,31 @@ class Scrubber {
           synths[currentSynth].off(note.note);
         }
       }
+
+      if (this.otherInstruments)
+        for (var instr of this.otherInstruments) {
+          var instFull = instr.content[0];
+
+          var i = 0;
+          if (instFull.instrument == "Drums") {
+            i = 0;
+          } else if (instFull.instrument == "Synth") {
+            i = 1;
+          } else if (instFull.instrument == "Bass") {
+            i = 2;
+          }
+
+          for (var note of instFull.notes) {
+            var normStart = note.timeStart * this.duration;
+            var normEnd = note.timeEnd * this.duration;
+            if (this.lastTime <= normStart && normStart < currentTime) {
+              synths[i].on(note.note);
+            }
+            if (this.lastTime <= normEnd && normEnd < currentTime) {
+              synths[i].off(note.note);
+            }
+          }
+        }
 
       this.lastTime = currentTime;
 
@@ -333,5 +382,18 @@ Template.piano.onRendered(function(){
       $("#record").css({"color": "red", "fontWeight": "bold"});
     }
   })
+
+  this.sequencer = sequencer;
+  this.scrubber = scrubber;
+
+  pianoOn = true;
+
+})
+
+Template.piano.onDestroyed(function() {
+  this.sequencer.destroy();
+  this.scrubber.destroy();
+
+  pianoOn = false;
 
 })

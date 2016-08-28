@@ -105,6 +105,10 @@ if(Meteor.isClient) {
     	console.log('hey')
     	Meteor.call('getSongData', function(err, result) {
     		if (result) {
+                otherInstruments = result;
+                if (scrubber) {
+                    scrubber.loadOtherInstruments(result);
+                }
     			console.log(result)
     		}
     	})
@@ -131,7 +135,11 @@ if(Meteor.isClient) {
 
     Template.songEditor.events({
     	'click #doneEditing': function() {
-    		Meteor.call('doneEditing', Meteor.user().profile.currentSong, function(err, result) {
+            if (!scrubber) {
+                return;
+            }
+            
+    		Meteor.call('doneEditing', scrubber.notes, Meteor.user().profile.currentSong, function(err, result) {
 				FlowRouter.go("/home");
 				if (result) {
 					alertify.prompt("Song finished!", "Your song is all done! What's it called?", "Song name ...", function(evt, val) {

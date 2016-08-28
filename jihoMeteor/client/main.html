@@ -3,7 +3,6 @@
 </head>
 
 <template name="main">
-    {{> piano}}
     <div class="ui container">
         {{#if currentUser}}        
             {{> Template.dynamic template=currentPage}}
@@ -58,13 +57,15 @@
             </div>
         </div>
     {{else}}
+        <br />
+        {{> piano}}
         <div id="songEditor" class="holder">
-            <div class="ui middle aligned centered grid">
-                <div class="column">
-                    You are in a lobby!
+            <!-- <div class="ui middle aligned centered grid"> -->
+                <!-- <div class="column"> -->
+
                     <button id="doneEditing" class="ui fluid blue button">Done</button>
-                </div>
-            </div>
+                <!-- </div> -->
+            <!-- </div> -->
         </div>
     {{/if}}
 </template>

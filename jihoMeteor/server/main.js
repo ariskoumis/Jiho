@@ -51,7 +51,7 @@ Meteor.startup(() => {
     			}
     		}
     	},
-    	doneEditing: function(songID) {
+    	doneEditing: function(notes, songID) {
             let currentInstrument;
     		if(songs.findOne({_id: songID}).state == "1") {
                 currentInstrument = "Drums";
@@ -94,24 +94,7 @@ Meteor.startup(() => {
                 content: [
                     {
                         instrument: currentInstrument,
-                        notes: [
-                            {
-                                timeStart: 1,
-                                timeEnd: 10,
-                                note:1
-                            }, 
-                            {
-                                timeStart: 4,
-                                timeEnd: 12,
-                                note:5
-                            }, 
-                            {
-                                timeStart: 5,
-                                timeEnd: 14,
-                                note:3
-                            }, 
-                        ]
-
+                        notes: notes
                     }
                 ]
             }
