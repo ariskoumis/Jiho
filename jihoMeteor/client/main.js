@@ -74,16 +74,15 @@ if(Meteor.isClient) {
         }
     });
 
-    Template.home.onRendered(function() {
+    Template.turnBased.onRendered(function() {
     	this.$('.ui.dropdown').dropdown();
     	$("#loading").transition('toggle');
-    	$(".ui.basic.modal").modal("show")
     })
 
-    Template.home.events({
+    Template.turnBased.events({
     	"click #startPlaying": function() {
     		if ($('[name=instrument]').val()) {
-    			$("#homeDiv").transition('scale');
+    			$("#turnBasedDiv").transition('scale');
 	    		let user = {
 	    			id: Meteor.user()._id,
 	    			name: Meteor.user().firstName,
@@ -92,7 +91,7 @@ if(Meteor.isClient) {
 				Meteor.call('begin', user)
 				FlowRouter.go("/songEditor");
 			} else {
-				$("#homeDiv").transition('shake');
+				$("#turnBasedDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
 			}
     	},
@@ -132,16 +131,13 @@ if(Meteor.isClient) {
     Template.songEditor.events({
     	'click #doneEditing': function() {
     		Meteor.call('doneEditing', Meteor.user().profile.currentSong, function(err, result) {
-				FlowRouter.go("/home");
+				FlowRouter.go("/turnBased");
 				if (result) {
 					alertify.prompt("Song finished!", "Your song is all done! What's it called?", "Song name ...", function(evt, val) {
 						Meteor.call('nameSong', val);
 					}, function() {});
 				}
     		});
-    	},
-    	'click #goHome': function() {
-    		FlowRouter.go("/home");
     	},
     })
 
@@ -163,19 +159,23 @@ if(Meteor.isClient) {
     })
 
     Template.mySongs.events({
-    	"click #backHome": function() {
-    		FlowRouter.go("/home");
+    	"click #goBack": function() {
+    		FlowRouter.go("/turnBased");
     	}
     })
 
     Template.modalContent.events({
     	"click #turnBased": function() {
     		$(".ui.modal").modal('hide all')
-    		FlowRouter.go("/home")
+    		FlowRouter.go("/turnBased")
     	}, 
     	"click #freeJam": function() {
     		$(".ui.modal").modal('hide all')
     		FlowRouter.go("/freeJam");
     	}
+    })
+
+    Template.home.onRendered(function() {
+    	$(".ui.basic.modal").modal("show")
     })
 }
