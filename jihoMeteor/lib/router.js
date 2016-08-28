@@ -13,3 +13,11 @@ FlowRouter.route('/:currentPage', {
     $(".ui.sidebar").sidebar('hide')
   }
 });
+
+FlowRouter.route('/songPlayback/:songId', {
+  name: 'songPlayback',
+  action: function(params) {
+    BlazeLayout.render("main", {currentPage: "songPlayback"})
+    Session.set("songId", params.songId);
+  }
+})

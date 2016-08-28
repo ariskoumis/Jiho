@@ -169,7 +169,7 @@
                     {{apostrophe firstName}} Music
                 </h3>
                 {{#each songList}}
-                    <li><a href="/">{{this.name}}</a></li>
+                    <li><a href={{link this}}>{{this.name}}</a></li>
                 {{/each}}
                 <div class="ui divider"></div>
                 <button id="goBack" class="ui fluid blue button">Go Back</button>
@@ -221,4 +221,8 @@
     <div class="ui basic modal">
         {{> modalContent}}
     </div>
+</template>
+
+<template name="songPlayback">
+    this song is {{currentSong}}
 </template>
