@@ -54,15 +54,26 @@
                 </div>
             </div>
         </div>
-   {{else}}
-        <div id="songEditor" class="holder">
-            <div class="ui middle aligned centered grid">
-                <div class="column">
-                    You are in a lobby!
-                    <button id="doneEditing" class="ui fluid blue button">Done</button>
+    {{else}}
+        {{#if currentlyBass}}
+            <div id="songEditor" class="holder">
+                <div class="ui middle aligned centered grid">
+                    <div class="column">
+                        Song completed!
+                        <button id="goHome" class="ui fluid blue button">Home</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        {{else}}
+            <div id="songEditor" class="holder">
+                <div class="ui middle aligned centered grid">
+                    <div class="column">
+                        You are in a lobby!
+                        <button id="doneEditing" class="ui fluid blue button">Done</button>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
     {{/if}}
 </template>
 

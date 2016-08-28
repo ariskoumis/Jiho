@@ -103,6 +103,15 @@ if(Meteor.isClient) {
 	    		return user.profile.waiting;
 	    	else
 	    		return false;
+    	},
+    	'currentlyBass': function() {
+    		var user = Meteor.user();
+    		if (user && user.profile) {
+	    		return (user.profile.instrument == "Bass");
+    		}
+	    	else {
+	    		return false;
+	    	}
     	}
     })
 
@@ -111,6 +120,9 @@ if(Meteor.isClient) {
     		Meteor.call('doneEditing', Meteor.user().profile.currentSong, function(err, result) {
 				FlowRouter.go("/home");
     		});
+    	},
+    	'click #goHome': function() {
+    		FlowRouter.go("/home");
     	}
     })
 }

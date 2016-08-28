@@ -22,7 +22,6 @@ Meteor.startup(() => {
 
     Meteor.methods({
     	begin: function(user) {
-    		console.log(user.id)
     		Meteor.users.update(user.id, {$set: {"profile.instrument": user.instrument}});
     		if(user.instrument == "Drums") {
     			let newSong = {
@@ -31,7 +30,6 @@ Meteor.startup(() => {
     			}
     		newSong.players.push(user.id);
     		songID = songs.insert(newSong);
-    		console.log("OKOKOK", songID);
     		Meteor.users.update(user.id, {$set: {"profile.currentSong": songID}});
     		} else if(user.instrument == "Synth") {
     			Meteor.users.update(user.id, {$set: {"profile.waiting": true}});
@@ -40,23 +38,20 @@ Meteor.startup(() => {
     		}
     	},
     	doneEditing: function(songID) {
-    		console.log("SONG ID!!", songID);
-    		console.log("STATE BITCH!! ", songs.findOne({_id: songID}).state);
-    		console.log("STATE BITCH!! ", songs.findOne({_id: songID}));
     		if(songs.findOne({_id: songID}).state == "1") {
-				songs.update(songID, {
-    				$set: {state: 2}
-    			})
 				let newUser = Meteor.users.findOne({"profile.waiting":true, "profile.instrument": "Synth"})
-				console.log("heyheyhey!", newUser);
+				songs.update(songID, {
+    				$set: {state: 2}, 
+    				$push: {players: newUser._id}
+    			})
 				Meteor.users.update(newUser._id, {$set: {"profile.waiting": false, "profile.currentSong": songID}});
     		}
     		else if(songs.findOne({_id: songID}).state == "2") {
-				songs.update(songID, {
-    				$set: {state: 3}
-    			})
     			let newUser = Meteor.users.findOne({"profile.waiting":true, "profile.instrument": "Bass"})
-				console.log("heyheyhey!", newUser);
+    			songs.update(songID, {
+    				$set: {state: 3},
+    				$push: {players: newUser._id} 
+    			})
 				Meteor.users.update(newUser._id, {$set: {"profile.waiting": false, "profile.currentSong": songID}});
     		} else {
 	    		songs.update(songID, {
