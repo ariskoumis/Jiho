@@ -29,7 +29,11 @@ Meteor.startup(() => {
     			}
     			game.players.push(user.id);
     			songs.insert(game);
+    		} else if(user.instrument == "Synth") {
+    			console.log(songs.find({state: 2}).fetch());
+    		} else if(user.instrument == "Bass") {
+    			console.log(songs.find({state: 3}).fetch());
     		}
-    	}
+    	},
     })
 });

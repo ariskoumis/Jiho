@@ -75,17 +75,20 @@ if(Meteor.isClient) {
 
     Template.home.onRendered(function() {
     	this.$('.ui.dropdown').dropdown();
+    	$("#loading").transition('toggle');
     })
 
     Template.home.events({
     	"click #startPlaying": function() {
     		if ($('[name=instrument]').val()) {
+    			$("#homeDiv").transition('scale');
+    			$("#loading").transition('scale');
 	    		let user = {
 	    			id: Meteor.user()._id,
 	    			name: Meteor.user().firstName,
 	    			instrument: $('[name=instrument]').val(),
 				}
-				Meteor.call('begin', user);
+				Meteor.call('begin', user)
 			} else {
 				$("#homeDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
