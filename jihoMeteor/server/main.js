@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-userDB = new Mongo.Collection("userDB");
+songs = new Mongo.Collection("songs");
 
 Meteor.startup(() => {
 
@@ -19,4 +19,17 @@ Meteor.startup(() => {
             this.ready();
         }
     });
+
+    Meteor.methods({
+    	begin: function(user) {
+    		if(user.instrument == "Drums") {
+    			let game = {
+    				players: [],
+    				state: 1
+    			}
+    			game.players.push(user.id);
+    			songs.insert(game);
+    		}
+    	}
+    })
 });

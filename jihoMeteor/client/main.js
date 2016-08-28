@@ -4,7 +4,7 @@ import { Session } from 'meteor/session';
 
 import './main.html';
 
-userDB = new Mongo.Collection("userDB");
+songs = new Mongo.Collection("songs");
 
 if(Meteor.isClient) {
 	Meteor.subscribe("userData");
@@ -81,11 +81,11 @@ if(Meteor.isClient) {
     	"click #startPlaying": function() {
     		if ($('[name=instrument]').val()) {
 	    		let user = {
-	    			userID: Meteor.user()._id,
+	    			id: Meteor.user()._id,
 	    			name: Meteor.user().firstName,
 	    			instrument: $('[name=instrument]').val(),
 				}
-				console.log(user)
+				Meteor.call('begin', user);
 			} else {
 				$("#homeDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
