@@ -3,7 +3,6 @@ FlowRouter.route('/', {
   action: function() {
   	$(".ui.sidebar").sidebar('hide')
     BlazeLayout.render("main", {currentPage: "home"})
-    Session.set('currentPage', 'home'); //Header for Menu
   }
 });
 
@@ -12,6 +11,5 @@ FlowRouter.route('/:currentPage', {
   action: function(params) {
     BlazeLayout.render("main", {currentPage: params.currentPage})
     $(".ui.sidebar").sidebar('hide')
-    Session.set('currentPage',params.currentPage); //Header for Menu
   }
 });

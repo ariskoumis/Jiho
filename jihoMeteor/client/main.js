@@ -8,6 +8,8 @@ songs = new Mongo.Collection("songs");
 songData = new Mongo.Collection("songData");
 
 if(Meteor.isClient) {
+	$('.ui.modal').modal();
+
 	Meteor.subscribe("userData");
 
 	Template.registerHelper( 'firstName', () => {
@@ -52,8 +54,6 @@ if(Meteor.isClient) {
                         if (err) {
                             $('#createAccountDiv').transition('shake');
                             alertify.alert(err.reason);
-                        } else {
-                            $('.ui.basic.modal').modal('show');
                         }
                     });
                 }
@@ -77,6 +77,7 @@ if(Meteor.isClient) {
     Template.home.onRendered(function() {
     	this.$('.ui.dropdown').dropdown();
     	$("#loading").transition('toggle');
+    	$(".ui.basic.modal").modal("show")
     })
 
     Template.home.events({
@@ -98,6 +99,15 @@ if(Meteor.isClient) {
     	"click #mySongs": function() {
     		FlowRouter.go("/mySongs");
     	}
+    })
+
+    Template.songEditor.onRendered(function() {
+    	console.log('hey')
+    	Meteor.call('getSongData', function(err, result) {
+    		if (result) {
+    			console.log(result)
+    		}
+    	})
     })
 
     Template.songEditor.helpers({
@@ -155,6 +165,17 @@ if(Meteor.isClient) {
     Template.mySongs.events({
     	"click #backHome": function() {
     		FlowRouter.go("/home");
+    	}
+    })
+
+    Template.modalContent.events({
+    	"click #turnBased": function() {
+    		$(".ui.modal").modal('hide all')
+    		FlowRouter.go("/home")
+    	}, 
+    	"click #freeJam": function() {
+    		$(".ui.modal").modal('hide all')
+    		FlowRouter.go("/freeJam");
     	}
     })
 }
