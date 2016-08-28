@@ -224,5 +224,17 @@
 </template>
 
 <template name="songPlayback">
-    this song is {{currentSong}}
+     <div class="holder">
+        <div class="ui middle aligned centered grid">
+            <div class="column">
+                <h3 class="ui horizontal divider header topSpacing">
+                  <i class="music icon"></i>
+                    Song playback
+                </h3>
+                <div class="ui divider"></div> 
+                this songs ID is {{currentSong}}
+                <button id="exitPlayback" class="ui fluid blue button">Go Back</button>
+            </div>
+        </div>
+    </div>
 </template>

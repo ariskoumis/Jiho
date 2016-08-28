@@ -192,10 +192,17 @@ if(Meteor.isClient) {
 
     Template.songPlayback.onRendered(function() {
         console.log(songData.find({songID:Session.get("songId")}).fetch())
-    })
+    });
+
     Template.songPlayback.helpers({
         currentSong: function() {
             return Session.get("songId");
+        }
+    })
+
+    Template.songPlayback.events({
+        "click #exitPlayback": function() {
+            FlowRouter.go("/home")
         }
     })
 }
