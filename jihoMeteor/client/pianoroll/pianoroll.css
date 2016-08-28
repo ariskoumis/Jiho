@@ -1,0 +1,133 @@
+#synth-sequencer {
+  width: 90%;
+  height: 250px;
+  background: gray;
+  position: relative;
+  overflow-y: scroll;
+
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+
+  margin: auto;
+}
+
+html {
+  height: 100%;
+}
+html, body {
+  min-height: 100%;
+}
+
+#synth-sequencer .key-head {
+  position: absolute;
+  top: 0;
+
+  display: inline-block;
+  width: 10%;
+  vertical-align: top;
+  box-shadow: -10px 0px 10px rgba(0,0,0,0.1);
+
+  z-index: 2;
+}
+
+#synth-sequencer .keys-body-wrapper {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  /*display: inline-block;*/
+  background: #ccc;
+  width: 90%;
+  white-space: nowrap;
+  overflow-x: scroll;
+  vertical-align: top;
+}
+
+#synth-sequencer .keys-body {
+  width: 1600px;
+}
+
+#synth-sequencer .key-label {
+  transition: background 0.1s, box-shadow 0.5s;
+}
+
+#synth-sequencer .key-white {
+  background: white;
+  width: 100%;
+  height: 20px;
+  /*box-shadow: 1px 1px 5px black;*/
+  border-bottom: 1px solid #ccc;
+}
+
+#synth-sequencer .key-black {
+  background: #303030;
+  width: 100%;
+  height: 20px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+}
+
+#synth-sequencer .key-highlight {
+  background: #62fff0;
+  z-index: 100;
+  box-shadow: 0px 0px 50px #62fff0, 0px 0px 5px white;
+}
+
+#synth-sequencer .key-row {
+  height: 20px;
+}
+
+#synth-sequencer .key-row:nth-child(even) {
+  background: #444;
+  background-image: repeating-linear-gradient(90deg,#444, #444 99px, #222 100px, #222 100px);
+}
+
+#synth-sequencer .key-row:nth-child(odd) {
+  background: #505050;
+  background-image: repeating-linear-gradient(90deg,#505050, #505050 99px, #222 100px, #222 100px);
+}
+
+#synth-sequencer .keys-user {
+  width: 100%;
+}
+
+#synth-sequencer .keys-user .note {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 98px;
+  height: 18px;
+  background: rgb(102, 227, 255);
+  border: 1px solid rgb(150, 255, 200);
+}
+
+#synth-sequencer .keys-user .note:hover {
+  box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.4);
+}
+
+#synth-sequencer .keys-scrubber-line {
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background: red;
+  top: 0;
+  left: 10px;
+  box-shadow: 0px 0px 5px red;
+}
+
+#scrubber {
+  position: relative;
+
+  margin: auto;
+  width: 90%;
+  height: 30px;
+  background: white;
+
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+#scrubber .scrubber-line {
+  position: absolute;
+  height: 100%;
+  width: 1px;
+  background: red;
+  left: 10px;
+  box-shadow: 0px 0px 5px red;
+}
