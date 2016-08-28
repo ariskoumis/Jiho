@@ -23,12 +23,13 @@ Meteor.startup(() => {
     Meteor.methods({
     	begin: function(user) {
     		if(user.instrument == "Drums") {
-    			let game = {
+    			let newSong = {
     				players: [],
     				state: 1
     			}
-    			game.players.push(user.id);
-    			songs.insert(game);
+    			newSong.players.push(user.id);
+    			var songID = songs.insert(newSong);
+    			return songID;
     		} else if(user.instrument == "Synth") {
     			console.log(songs.find({state: 2}).fetch());
     		} else if(user.instrument == "Bass") {

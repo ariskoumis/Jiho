@@ -88,11 +88,22 @@ if(Meteor.isClient) {
 	    			name: Meteor.user().firstName,
 	    			instrument: $('[name=instrument]').val(),
 				}
-				Meteor.call('begin', user)
+				Meteor.call('begin', user, function(err, result) {
+					if(!err) {
+						Session.set("songID", result);
+						FlowRouter.go("/songEditor");
+					}
+				})
 			} else {
 				$("#homeDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
 			}
+    	}
+    })
+
+    Template.songEditor.helpers({
+    	'songID': function() {
+    		return Session.get("songID");
     	}
     })
 }
