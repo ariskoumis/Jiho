@@ -39,6 +39,8 @@
                 </div>
                 <br>
                 <button id="startPlaying" class="ui fluid blue button">Begin</button>
+                <div class="ui divider"></div>
+                <button id="mySongs" class="ui fluid blue button">My Songs</button>
             </div>
         </div>
     </div>
@@ -59,7 +61,14 @@
             <div id="songEditor" class="holder">
                 <div class="ui middle aligned centered grid">
                     <div class="column">
-                        Song completed!
+                        <h4 class="ui horizontal divider header topSpacing">
+                            Song completed! What do you want to name it?
+                        </h4>
+                        <div class="ui fluid action input">
+                          <input id="songName" placeholder="Name...">
+                          <button id="submitSongName" class="ui button">Submit</button>
+                        </div>
+                        <div class="ui divider"></div>
                         <button id="goHome" class="ui fluid blue button">Home</button>
                     </div>
                 </div>
@@ -164,5 +173,18 @@
                 </div>
             </div>
         </form>
+    </div>
+</template>
+
+<template name="mySongs">
+    <div id="songCollection" class="holder">
+        <div class="ui middle aligned centered grid">
+            <div class="column">
+                <h3 class="ui horizontal divider header topSpacing">
+                  <i class="music icon"></i>
+                    {{apostrophe firstName}} Music
+                </h3>
+            </div>
+        </div>
     </div>
 </template>

@@ -93,6 +93,9 @@ if(Meteor.isClient) {
 				$("#homeDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
 			}
+    	},
+    	"click #mySongs": function() {
+    		FlowRouter.go("/mySongs");
     	}
     })
 
@@ -123,6 +126,24 @@ if(Meteor.isClient) {
     	},
     	'click #goHome': function() {
     		FlowRouter.go("/home");
+    	},
+    	'click #submitSongName': function() {
+			songName = $("#songName").val()
+			Meteor.call('nameSong', songName);
+    	}
+    })
+
+    Template.mySongs.onRendered(function() {
+    	$("#goHome").transition('toggle');
+    });
+
+    Template.mySongs.helpers({
+    	"apostrophe": function(name) {
+    		if((name.charAt(name.length - 1)) == "s") {
+    			return name+"'"
+    		} else {
+    			return name+"'s"
+    		}
     	}
     })
 }

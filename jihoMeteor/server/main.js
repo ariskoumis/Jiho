@@ -57,9 +57,12 @@ Meteor.startup(() => {
 	    		songs.update(songID, {
     				$set: {state: 1}
     			})
-
     		}
-    		console.log(songs.find({_id: songID}).fetch())
+    	},
+    	nameSong: function(nameInput) {
+    		songs.update(Meteor.user().profile.currentSong, {
+    			$set: {name: nameInput}
+    		});
     	}
     })
 });
