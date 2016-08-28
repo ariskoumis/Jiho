@@ -134,7 +134,7 @@ if(Meteor.isClient) {
     })
 
     Template.mySongs.onRendered(function() {
-    	$("#goHome").transition('toggle');
+    	$("#goHome").hide();
     });
 
     Template.mySongs.helpers({
