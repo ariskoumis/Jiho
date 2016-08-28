@@ -126,6 +126,9 @@ Meteor.startup(() => {
     		songs.update(Meteor.user().profile.currentSong, {
     			$set: {name: nameInput}
     		});
-    	}
+    	},
+        // getUserSongs: function() {
+        //     return songs.find({players: Meteor.user()._id}).fetch()
+        // }
     })
 });

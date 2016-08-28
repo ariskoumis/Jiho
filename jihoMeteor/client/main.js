@@ -140,12 +140,21 @@ if(Meteor.isClient) {
     });
 
     Template.mySongs.helpers({
+    	"songList": function() {
+    		return songs.find({players: Meteor.user()._id}).fetch()
+    	},
     	"apostrophe": function(name) {
     		if((name.charAt(name.length - 1)) == "s") {
     			return name+"'"
     		} else {
     			return name+"'s"
     		}
+    	}
+    })
+
+    Template.mySongs.events({
+    	"click #backHome": function() {
+    		FlowRouter.go("/home");
     	}
     })
 }

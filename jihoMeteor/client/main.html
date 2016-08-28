@@ -166,6 +166,11 @@
                   <i class="music icon"></i>
                     {{apostrophe firstName}} Music
                 </h3>
+                {{#each songList}}
+                    <li><a href="/">{{this.name}}</a></li>
+                {{/each}}
+                <div class="ui divider"></div>
+                <button id="backHome" class="ui fluid blue button">Go Back</button>
             </div>
         </div>
     </div>
