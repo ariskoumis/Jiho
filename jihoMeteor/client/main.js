@@ -43,7 +43,6 @@ if(Meteor.isClient) {
                 firstName: $('[name=firstName]').val(),
                 lastName: $('[name=lastName]').val(),
                 password: $('[name=password]').val(),
-                birthday: $('[name=birthday]').val()
             }
             Accounts.createUser(user, function(err) {
                 if (err) {
