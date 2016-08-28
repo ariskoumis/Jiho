@@ -156,8 +156,8 @@ class Scrubber {
     this.notes = [];
     this.notesDom = [];
     this.otherInstruments = otherInstruments;
-
-    console.log(this.notes);
+    if (otherInstruments)
+      currentSynth = this.otherInstruments.length; // lol hacky sack
 
     this.recordingKeys = {};
 
@@ -166,12 +166,26 @@ class Scrubber {
 
   loadOtherInstruments(otherInstruments) {
     this.otherInstruments = otherInstruments;
+    currentSynth = this.otherInstruments.length; // lol hacky sack
+
+    console.log("AHHH")
+
+    for (var instr of this.otherInstruments) {
+      var instFull = instr.content[0];
+
+      for (var note of instFull.notes) {
+        this.createNoteDOMGhost(note);
+      }
+    }
+    
   }
 
   destroy() {
     this.destroyed = true;
     $(document.body).unbind("mouseup", this._mouseup);
     $(document.body).unbind("mousemove", this._mousemove);
+
+    this.silence();
   }
 
   currentTime() {
@@ -214,7 +228,8 @@ class Scrubber {
         }
       }
 
-      if (this.otherInstruments)
+      if (this.otherInstruments) {
+        currentSynth = this.otherInstruments.length; // lol hacky sack
         for (var instr of this.otherInstruments) {
           var instFull = instr.content[0];
 
@@ -232,12 +247,14 @@ class Scrubber {
             var normEnd = note.timeEnd * this.duration;
             if (this.lastTime <= normStart && normStart < currentTime) {
               synths[i].on(note.note);
+              console.log("LOL SYNTH", i);
             }
             if (this.lastTime <= normEnd && normEnd < currentTime) {
               synths[i].off(note.note);
             }
           }
         }
+      }
 
       this.lastTime = currentTime;
 
@@ -300,6 +317,18 @@ class Scrubber {
     });
 
     this.notesDom.push(noteDom[0]);
+
+    this.sequencer.keyUser.append(noteDom);
+  }
+
+  createNoteDOMGhost(note) {
+    var noteDom = $("<div class='note note-ghost'></div>");
+
+    noteDom.css({
+      "top": ((48 - note.note) * 20) + "px",
+      "left": note.timeStart * 1600 + "px",
+      "width": (note.timeEnd - note.timeStart)*1600 + "px"
+    });
 
     this.sequencer.keyUser.append(noteDom);
   }

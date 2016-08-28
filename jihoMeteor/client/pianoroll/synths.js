@@ -110,6 +110,86 @@ function freq(halfStep) {
 
 var context = new (window.AudioContext || window.webkitAudioContext)();
 
+class BufferLoader {
+  constructor(context, urlList, callback) {
+    this.context = context;
+    this.urlList = urlList;
+    this.onload = callback;
+    this.bufferList = new Array();
+    this.loadCount = 0;
+  }
+
+  loadBuffer(url, index) {
+    // Load buffer asynchronously
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.responseType = "arraybuffer";
+
+    var loader = this;
+
+    request.onload = function() {
+      // Asynchronously decode the audio file data in request.response
+      loader.context.decodeAudioData(
+        request.response,
+        function(buffer) {
+          if (!buffer) {
+            alert('error decoding file data: ' + url);
+            return;
+          }
+          loader.bufferList[index] = buffer;
+          if (++loader.loadCount == loader.urlList.length)
+            loader.onload(loader.bufferList);
+        },
+        function(error) {
+          console.error('decodeAudioData error', error);
+        }
+      );
+    }
+
+    request.onerror = function() {
+      alert('BufferLoader: XHR error');
+    }
+
+    request.send();
+  }
+
+  load() {
+    for (var i = 0; i < this.urlList.length; ++i)
+    this.loadBuffer(this.urlList[i], i);
+  };
+}
+
+function loadSounds(soundMap) {
+    return new Promise((resolve, reject) => {
+        let names = [];
+        let paths = [];
+        let result = {};
+        for (let name in soundMap) {
+            let path = soundMap[name];
+            names.push(name);
+            paths.push(path);
+        }
+        
+        var bufferLoader = new BufferLoader(context, paths, (bufferList) => {
+            for (let i = 0; i < bufferList.length; i++) {
+                let buffer = bufferList[i];
+                let name = names[i];
+                result[name] = buffer;
+            }
+            resolve(result);
+        });
+        bufferLoader.load();
+    });
+}
+
+
+function playSound(buffer, time) {
+    let source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source[source.start ? 'start' : 'noteOn'](0);
+}
+
 function bus(nodes) {
   var last = null;
   for (var node of nodes) {
@@ -157,6 +237,8 @@ class Voice {
     this.oscillator.detune.value = 0;
     this.oscillator.connect(this.gainNode);
     this.start();
+    
+    this.offset = 0;
 
   }
 
@@ -176,7 +258,7 @@ class Voice {
       offset = 12*3
     }
 
-    this.setFreq(freq(halfStep - 10 + offset));
+    this.setFreq(freq(halfStep - 10 + offset + this.offset));
   }
 
   setFreq(freq) {
@@ -194,7 +276,45 @@ class BassVoice extends Voice {
   constructor() {
     super();
 
+    this.offset = -12
     this.oscillator.type = 'sawtooth';
+  }
+}
+
+var drumSounds = {}
+loadSounds({
+  kick: 'wav/kick.wav',
+  snare: 'wav/snare.wav',
+  hihat: 'wav/hihat.wav'
+}).then((ugh) => {
+  drumSounds = ugh;
+});
+
+class DrumVoice extends Voice {
+  constructor() {
+    super();
+
+    this.pressed = false;
+    this.oscillator.type = 'sine';
+  }
+
+  setNote(note) {
+    if (this.pressed) return;
+    this.pressed = true;
+
+    if (note % 3 == 0) {
+      playSound(drumSounds.kick);
+    } else if (note % 3 == 1) {
+      playSound(drumSounds.snare)
+    } else if (note % 3 == 2) {
+      playSound(drumSounds.hihat);
+    }
+  }
+
+  setVol(vol) {
+    if (vol == 0) {
+      this.pressed = false;
+    }
   }
 }
 
@@ -209,8 +329,8 @@ class Synth {
   on(halfStep) {
     var voice = this.voices[halfStep];
     if (!voice) {
-      if (voicePool.length > 0) {
-        voice = voicePool.pop();
+      if (this.voicePool.length > 0) {
+        voice = this.voicePool.pop();
       } else {
         voice = new this.Voice();
       }
@@ -224,7 +344,7 @@ class Synth {
     if (this.voices[halfStep]) {
       this.voices[halfStep].setVol(0);
 
-      voicePool.push(this.voices[halfStep]);
+      this.voicePool.push(this.voices[halfStep]);
       this.voices[halfStep] = undefined;
       delete this.voices[halfStep];
     }
@@ -256,14 +376,14 @@ class BassSynth extends Synth {
 
 class DrumSynth extends Synth {
   constructor() {
-    super();
-    this.Voice = BassVoice;
+    super()
+    this.Voice = DrumVoice;
   }
 }
 
+synths.push(new DrumSynth());
 synths.push(new Synth());
 synths.push(new BassSynth());
-synths.push(new DrumSynth());
 
 function step() {
 
@@ -287,3 +407,5 @@ function step() {
   requestAnimationFrame(step);
 }
 step();
+
+// DRUMS
