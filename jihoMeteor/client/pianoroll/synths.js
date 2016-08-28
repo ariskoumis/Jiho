@@ -2,6 +2,8 @@
 currentSynth = 0;
 synths = [];
 
+live = false;
+
 var requestAnimationFrame = window.requestAnimationFrame;
 
 var halfStepTranslation = {
@@ -40,6 +42,16 @@ console.log('ws://' + window.location.host.split(':')[0] + ':8080/')
 //   console.log(data);
 // })
 
+
+Streamy.on('play', function(d) {
+  if (d.play) {
+    synths[d.synth].on(d.note)
+  } else {
+    synths[d.synth].off(d.note)
+  }
+})
+
+
 function LoadBuffer(ctx, url, cb) {
 
   var request = new XMLHttpRequest();
@@ -76,9 +88,17 @@ window.addEventListener('keydown', (event) => {
 
   if (halfStep) {
     // primus.write({halfStep: halfStep + octave*12, state: true});
-    onlineKeys[halfStep + octave*12] = true;
-    offlineKeys[halfStep + octave*12] = true;
-    sequencer.keyHeads[halfStep + octave*12].addClass("key-highlight");
+    if (live) {
+
+      Streamy.emit('note', { note: halfStep + octave*12, play: true, synth: currentSynth });
+
+    } else {
+
+      onlineKeys[halfStep + octave*12] = true;
+      offlineKeys[halfStep + octave*12] = true;
+      sequencer.keyHeads[halfStep + octave*12].addClass("key-highlight");
+
+    }
   }
 
   if (event.which == 90) {
@@ -95,10 +115,17 @@ window.addEventListener('keyup', (event) => {
   var halfStep = halfStepTranslation[event.which];
 
   if (halfStep) {
+    if (live) {
+
+      Streamy.emit('note', { note: halfStep + octave*12, play: false, synth: currentSynth });
+
+    } else {
+
     // primus.write({halfStep: halfStep + octave*12, state: false});
-    onlineKeys[halfStep + octave*12] = false;
-    offlineKeys[halfStep + octave*12] = false;
-    sequencer.keyHeads[halfStep + octave*12].removeClass("key-highlight");
+      onlineKeys[halfStep + octave*12] = false;
+      offlineKeys[halfStep + octave*12] = false;
+      sequencer.keyHeads[halfStep + octave*12].removeClass("key-highlight");
+    }
   }
 });
 
@@ -283,9 +310,9 @@ class BassVoice extends Voice {
 
 var drumSounds = {}
 loadSounds({
-  kick: 'wav/kick.wav',
-  snare: 'wav/snare.wav',
-  hihat: 'wav/hihat.wav'
+  kick: '/wav/kick.wav',
+  snare: '/wav/snare.wav',
+  hihat: '/wav/hihat.wav'
 }).then((ugh) => {
   drumSounds = ugh;
 });

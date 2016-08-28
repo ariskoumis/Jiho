@@ -287,6 +287,10 @@ class Scrubber {
   }
 
   createNoteDOM(note) {
+    if (!this.sequencer) {
+      return;
+    }
+
     var noteDom = $("<div class='note'></div>");
 
     noteDom.mousedown((e) => {
@@ -322,6 +326,10 @@ class Scrubber {
   }
 
   createNoteDOMGhost(note) {
+    if (!this.sequencer) {
+      return;
+    }
+
     var noteDom = $("<div class='note note-ghost'></div>");
 
     noteDom.css({
@@ -382,7 +390,8 @@ class Scrubber {
     this.time = time;
     this.line.css({"left": time * this.dom.width()});
 
-    this.sequencer.scrubber.css({"left": (time * 1600) + "px"});
+    if (this.sequencer)
+      this.sequencer.scrubber.css({"left": (time * 1600) + "px"});
   }
 }
 
@@ -391,6 +400,8 @@ Template.piano.onRendered(function(){
 
   var sequencer = new StepSequencer();
   var scrubber = new Scrubber(sequencer);
+
+  live = false;
 
   $("#play").click((e) => {
     if (scrubber.playing) {
@@ -426,3 +437,29 @@ Template.piano.onDestroyed(function() {
   pianoOn = false;
 
 })
+
+
+Template.scrubber.onRendered(function(){
+
+  var scrubber = new Scrubber();
+
+  live = false;
+
+  $("#play").click((e) => {
+    if (scrubber.playing) {
+      scrubber.pause();
+    } else {
+      scrubber.play();
+    }
+    e.preventDefault();
+  })
+
+  this.scrubber = scrubber;
+
+})
+
+Template.scrubber.onDestroyed(function() {
+  this.scrubber.destroy();
+
+})
+

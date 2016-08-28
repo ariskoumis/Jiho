@@ -40,7 +40,9 @@
                 <br>
                 <button id="startPlaying" class="ui fluid blue button">Begin</button>
                 <div class="ui divider"></div>
-                <button id="mySongs" class="ui fluid blue button">My Songs</button>
+                <button id="mySongs" class="ui fluid red button">My Songs</button>
+                <br />
+                <button id="goBack" class="ui fluid white button">Go Back</button>
             </div>
         </div>
     </div>
@@ -167,7 +169,7 @@
                     <li><a href={{link this}}>{{this.name}}</a></li>
                 {{/each}}
                 <div class="ui divider"></div>
-                <button id="goBack" class="ui fluid blue button">Go Back</button>
+                <button id="goBack" class="ui fluid white button">Go Back</button>
             </div>
         </div>
     </div>
@@ -179,10 +181,27 @@
             <div class="column">
                 <h3 class="ui horizontal divider header topSpacing">
                   <i class="music icon"></i>
-                    BLANK
+                    You're live!
                 </h3>
+                Use your keyboard to make some jams, man!
+                <br />
+                <div class="ui form">
+                    <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="instrument">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Choose an instrument...</div>
+                            <div class="menu">
+                                <div class="item" data-value="Synth">Synth</div>
+                                <div class="item" data-value="Bass">Bass</div>
+                                <div class="item" data-value="Drums">Drums</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ui divider"></div> 
-                BLANK
+                <button id="goBack" class="ui fluid white button">Go Back</button>
             </div>
         </div>
     </div>
@@ -227,8 +246,9 @@
                     Song playback
                 </h3>
                 <div class="ui divider"></div> 
+                {{> scrubber}}
                 this songs ID is {{currentSong}}
-                <button id="exitPlayback" class="ui fluid blue button">Go Back</button>
+                <button id="exitPlayback" class="ui fluid white button">Go Back</button>
             </div>
         </div>
     </div>

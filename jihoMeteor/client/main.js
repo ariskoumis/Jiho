@@ -79,6 +79,10 @@ if(Meteor.isClient) {
     })
 
     Template.turnBased.events({
+        "click #goBack": function() {
+            FlowRouter.go("/");
+        },
+
     	"click #startPlaying": function() {
     		if ($('[name=instrument]').val()) {
     			$("#turnBasedDiv").transition('scale');
@@ -190,7 +194,16 @@ if(Meteor.isClient) {
     })
 
     Template.songPlayback.onRendered(function() {
-        console.log(songData.find({songID:Session.get("songId")}).fetch())
+        var result = songData.find({songID:Session.get("songId")}).fetch();
+
+        if (result) {
+            otherInstruments = result;
+            if (scrubber) {
+                scrubber.loadOtherInstruments(result);
+            }
+            console.log(result)
+        }
+
     });
 
     Template.songPlayback.helpers({
@@ -203,5 +216,32 @@ if(Meteor.isClient) {
         "click #exitPlayback": function() {
             FlowRouter.go("/turnBased")
         }
+    })
+
+    Template.freeJam.events({
+        "click #goBack": function() {
+            FlowRouter.go("/");
+        },
+
+        "change input[name=instrument]": function(e) {
+            if (e.target.value == "Drums") {
+                currentSynth = 0;
+            } else if (e.target.value == "Synth") {
+                currentSynth = 1;
+            } else if (e.target.value == "Bass") {
+                currentSynth = 2;
+            }
+            console.log(e.target.value);
+        }
+    })
+
+    Template.freeJam.onRendered(function() {
+        this.$('.ui.dropdown').dropdown();
+
+        live = true;
+    })
+
+    Template.freeJam.onDestroyed(function() {
+        live = false;
     })
 }
