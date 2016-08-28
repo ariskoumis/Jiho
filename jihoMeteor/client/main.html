@@ -118,22 +118,17 @@
         <br>
         <form id="createAccountForm" class="ui form attached fluid">
             <div class="six fields">
-                <div class="six wide field required">
+                <div class="eight wide field required">
                     <span> 
                         <label>First Name</label>
                     </span>
-                    <input class="ui" type="text" name="firstName" placeholder="John" required>
+                    <input type="text" name="firstName" placeholder="John" required>
                 </div>
-                <div class="six wide field required">
-                    <label>Last Name</label>
+                <div class="eight wide field required">
+                    <span>
+                        <label>Last Name</label>
+                    </span>
                     <input type="text" name="lastName" placeholder="Doe" required>
-                </div>
-                <div class="four wide field required">
-                    <label>Birthday</label>
-                    <div class="ui left icon input">
-                        <input type="date" name="birthday" required>
-                        <i class="birthday icon"></i>
-                    </div>
                 </div>
             </div>
             <div class="field required">
@@ -169,7 +164,7 @@
                     {{apostrophe firstName}} Music
                 </h3>
                 {{#each songList}}
-                    <li><a href="/">{{this.name}}</a></li>
+                    <li><a href={{link this}}>{{this.name}}</a></li>
                 {{/each}}
                 <div class="ui divider"></div>
                 <button id="goBack" class="ui fluid blue button">Go Back</button>
@@ -220,5 +215,21 @@
 <template name="home">
     <div class="ui basic modal">
         {{> modalContent}}
+    </div>
+</template>
+
+<template name="songPlayback">
+     <div class="holder">
+        <div class="ui middle aligned centered grid">
+            <div class="column">
+                <h3 class="ui horizontal divider header topSpacing">
+                  <i class="music icon"></i>
+                    Song playback
+                </h3>
+                <div class="ui divider"></div> 
+                this songs ID is {{currentSong}}
+                <button id="exitPlayback" class="ui fluid blue button">Go Back</button>
+            </div>
+        </div>
     </div>
 </template>

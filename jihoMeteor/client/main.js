@@ -43,7 +43,6 @@ if(Meteor.isClient) {
                 firstName: $('[name=firstName]').val(),
                 lastName: $('[name=lastName]').val(),
                 password: $('[name=password]').val(),
-                birthday: $('[name=birthday]').val()
             }
             Accounts.createUser(user, function(err) {
                 if (err) {
@@ -163,7 +162,10 @@ if(Meteor.isClient) {
     		} else {
     			return name+"'s"
     		}
-    	}
+    	},
+        "link": function(param) {
+            return "/songPlayback/"+param._id
+        }
     })
 
     Template.mySongs.events({
@@ -185,5 +187,21 @@ if(Meteor.isClient) {
 
     Template.home.onRendered(function() {
     	$(".ui.basic.modal").modal("show")
+    })
+
+    Template.songPlayback.onRendered(function() {
+        console.log(songData.find({songID:Session.get("songId")}).fetch())
+    });
+
+    Template.songPlayback.helpers({
+        currentSong: function() {
+            return Session.get("songId");
+        }
+    })
+
+    Template.songPlayback.events({
+        "click #exitPlayback": function() {
+            FlowRouter.go("/turnBased")
+        }
     })
 }

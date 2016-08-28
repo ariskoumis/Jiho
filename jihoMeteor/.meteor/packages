@@ -29,3 +29,4 @@ session@1.1.6
 ovcharik:alertifyjs
 accounts-password@1.3.0
 themeteorchef:jquery-validation
+joncursi:socket-io-client
