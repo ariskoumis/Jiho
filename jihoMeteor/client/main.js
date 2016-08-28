@@ -202,7 +202,7 @@ if(Meteor.isClient) {
 
     Template.songPlayback.events({
         "click #exitPlayback": function() {
-            FlowRouter.go("/home")
+            FlowRouter.go("/turnBased")
         }
     })
 }
