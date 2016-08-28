@@ -88,7 +88,6 @@ Meteor.startup(() => {
 	    		// songs.update(songID, {
     			// 	$set: {state: 1, locked: false}
     			// })
-    			console.log("Something went wrong..");
     		}
             let data = {
                 songID: songID,
@@ -118,6 +117,10 @@ Meteor.startup(() => {
 
             }
             songData.insert(data)
+            //Signify end of recording, have alert ask for song name
+            if (currentInstrument == "Bass") {
+                return true;
+            }
     	},
     	nameSong: function(nameInput) {
     		songs.update(Meteor.user().profile.currentSong, {

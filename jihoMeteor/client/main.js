@@ -108,30 +108,31 @@ if(Meteor.isClient) {
 	    	else
 	    		return false;
     	},
-    	'currentlyBass': function() {
-    		var user = Meteor.user();
-    		if (user && user.profile) {
-	    		return (user.profile.instrument == "Bass");
-    		}
-	    	else {
-	    		return false;
-	    	}
-    	}
+    	// 'currentlyBass': function() {
+    	// 	var user = Meteor.user();
+    	// 	if (user && user.profile) {
+	    // 		return (user.profile.instrument == "Bass");
+    	// 	}
+	    // 	else {
+	    // 		return false;
+	    // 	}
+    	// }
     })
 
     Template.songEditor.events({
     	'click #doneEditing': function() {
     		Meteor.call('doneEditing', Meteor.user().profile.currentSong, function(err, result) {
 				FlowRouter.go("/home");
+				if (result) {
+					alertify.prompt("Song finished!", "Your song is all done! What's it called?", "Song name ...", function(evt, val) {
+						Meteor.call('nameSong', val);
+					}, function() {});
+				}
     		});
     	},
     	'click #goHome': function() {
     		FlowRouter.go("/home");
     	},
-    	'click #submitSongName': function() {
-			songName = $("#songName").val()
-			Meteor.call('nameSong', songName);
-    	}
     })
 
     Template.mySongs.onRendered(function() {

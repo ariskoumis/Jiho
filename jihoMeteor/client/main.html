@@ -57,32 +57,14 @@
             </div>
         </div>
     {{else}}
-        {{#if currentlyBass}}
-            <div id="songEditor" class="holder">
-                <div class="ui middle aligned centered grid">
-                    <div class="column">
-                        <h4 class="ui horizontal divider header topSpacing">
-                            Song completed! What do you want to name it?
-                        </h4>
-                        <div class="ui fluid action input">
-                          <input id="songName" placeholder="Name...">
-                          <button id="submitSongName" class="ui button">Submit</button>
-                        </div>
-                        <div class="ui divider"></div>
-                        <button id="goHome" class="ui fluid blue button">Home</button>
-                    </div>
+        <div id="songEditor" class="holder">
+            <div class="ui middle aligned centered grid">
+                <div class="column">
+                    You are in a lobby!
+                    <button id="doneEditing" class="ui fluid blue button">Done</button>
                 </div>
             </div>
-        {{else}}
-            <div id="songEditor" class="holder">
-                <div class="ui middle aligned centered grid">
-                    <div class="column">
-                        You are in a lobby!
-                        <button id="doneEditing" class="ui fluid blue button">Done</button>
-                    </div>
-                </div>
-            </div>
-        {{/if}}
+        </div>
     {{/if}}
 </template>
 
