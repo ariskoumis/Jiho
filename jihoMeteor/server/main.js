@@ -114,7 +114,6 @@ Meteor.startup(() => {
 
                     }
                 ]
-
             }
             songData.insert(data)
             //Signify end of recording, have alert ask for song name
@@ -127,8 +126,11 @@ Meteor.startup(() => {
     			$set: {name: nameInput}
     		});
     	},
-        // getUserSongs: function() {
-        //     return songs.find({players: Meteor.user()._id}).fetch()
-        // }
+        getUserSongs: function() {
+            return songs.find({players: Meteor.user()._id}).fetch()
+        }, 
+        getSongData: function() {
+            return songData.find({songID: Meteor.user().profile.currentSong}).fetch();
+        }
     })
 });
