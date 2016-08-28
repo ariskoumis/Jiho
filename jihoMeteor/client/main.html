@@ -3,6 +3,7 @@
 </head>
 
 <template name="main">
+    {{> piano}}
     <div class="ui container">
         {{#if currentUser}}        
             {{> Template.dynamic template=currentPage}}
