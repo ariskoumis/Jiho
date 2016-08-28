@@ -82,18 +82,13 @@ if(Meteor.isClient) {
     	"click #startPlaying": function() {
     		if ($('[name=instrument]').val()) {
     			$("#homeDiv").transition('scale');
-    			$("#loading").transition('scale');
 	    		let user = {
 	    			id: Meteor.user()._id,
 	    			name: Meteor.user().firstName,
 	    			instrument: $('[name=instrument]').val(),
 				}
-				Meteor.call('begin', user, function(err, result) {
-					if(!err) {
-						Session.set("songID", result);
-						FlowRouter.go("/songEditor");
-					}
-				})
+				Meteor.call('begin', user)
+				FlowRouter.go("/songEditor");
 			} else {
 				$("#homeDiv").transition('shake');
 				alertify.alert("Error!","Please choose an instrument.");
@@ -102,8 +97,20 @@ if(Meteor.isClient) {
     })
 
     Template.songEditor.helpers({
-    	'songID': function() {
-    		return Session.get("songID");
+    	'waiting': function() {
+    		var user = Meteor.user();
+    		if (user && user.profile)
+	    		return user.profile.waiting;
+	    	else
+	    		return false;
+    	}
+    })
+
+    Template.songEditor.events({
+    	'click #doneEditing': function() {
+    		Meteor.call('doneEditing', Meteor.user().profile.currentSong, function(err, result) {
+				FlowRouter.go("/home");
+    		});
     	}
     })
 }
