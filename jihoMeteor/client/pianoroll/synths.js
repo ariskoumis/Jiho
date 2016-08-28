@@ -44,10 +44,12 @@ console.log('ws://' + window.location.host.split(':')[0] + ':8080/')
 
 
 Streamy.on('play', function(d) {
-  if (d.play) {
-    synths[d.synth].on(d.note)
-  } else {
-    synths[d.synth].off(d.note)
+  if (live) {
+    if (d.play) {
+      synths[d.synth].on(d.note)
+    } else {
+      synths[d.synth].off(d.note)
+    } 
   }
 })
 
