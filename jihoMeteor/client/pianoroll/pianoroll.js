@@ -161,6 +161,15 @@ class Scrubber {
 
     this.recordingKeys = {};
 
+    this.metros = [];
+    for (var i = 0; i < 4*4; i++) {
+      this.metros.push({
+        timeStart: i / (4*4),
+      })
+    }
+
+    this.metro = true;
+
     this.tick();
   }
 
@@ -225,6 +234,15 @@ class Scrubber {
         }
         if (this.lastTime <= normEnd && normEnd < currentTime) {
           synths[currentSynth].off(note.note);
+        }
+      }
+
+      if (this.metro) {
+        for (var note of this.metros) {
+          var normStart = note.timeStart * this.duration;
+          if (this.lastTime <= normStart && normStart < currentTime) {
+            gPlaySound(drumSounds.metro);
+          }
         }
       }
 
@@ -442,6 +460,7 @@ Template.piano.onDestroyed(function() {
 Template.scrubber.onRendered(function(){
 
   var scrubber = new Scrubber();
+  scrubber.metro = false;
 
   live = false;
 

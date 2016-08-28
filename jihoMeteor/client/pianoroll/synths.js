@@ -217,6 +217,8 @@ function playSound(buffer, time) {
     source[source.start ? 'start' : 'noteOn'](0);
 }
 
+gPlaySound = playSound;
+
 function bus(nodes) {
   var last = null;
   for (var node of nodes) {
@@ -259,7 +261,7 @@ class Voice {
     this.gainNode.gain.value = 0;
 
     this.oscillator = context.createOscillator();
-    this.oscillator.type = 'sawtooth';
+    this.oscillator.type = 'square';
     this.oscillator.frequency.value = 440;
     this.oscillator.detune.value = 0;
     this.oscillator.connect(this.gainNode);
@@ -308,11 +310,13 @@ class BassVoice extends Voice {
   }
 }
 
-var drumSounds = {}
+drumSounds = {}
 loadSounds({
   kick: '/wav/kick.wav',
   snare: '/wav/snare.wav',
-  hihat: '/wav/hihat.wav'
+  hihat: '/wav/closedhat.wav',
+  openhat: '/wav/openhat.wav',
+  metro: '/wav/youngmetro.wav'
 }).then((ugh) => {
   drumSounds = ugh;
 });
@@ -329,12 +333,14 @@ class DrumVoice extends Voice {
     if (this.pressed) return;
     this.pressed = true;
 
-    if (note % 3 == 0) {
+    if (note % 4 == 0) {
       playSound(drumSounds.kick);
-    } else if (note % 3 == 1) {
+    } else if (note % 4 == 1) {
       playSound(drumSounds.snare)
-    } else if (note % 3 == 2) {
+    } else if (note % 4 == 2) {
       playSound(drumSounds.hihat);
+    } else if (note % 4 == 3) {
+      playSound(drumSounds.openhat);
     }
   }
 
